@@ -36,9 +36,15 @@ async function startBot() {
     bot.command('start', start(db));
 
     bot.command('status', async ctx => {
+        const limiterStat = limiter.counts();
         const enabledRules = db.get('enabledRules').value();
-        ctx.reply(`Refreshing for ${enabledRules}`);
+        if (enabledRules.length) {
+            ctx.reply(`Refreshing for ${enabledRules.join(', ')}`);
+        } else {
+            ctx.reply('Not refreshing for any rule.');
+        }
         ctx.reply(`Uptime: ${process.uptime()}`);
+        ctx.reply(`Queued: ${limiterStat.QUEUED || 0}\nRunning: ${limiterStat.RUNNING || 0}\nDone: ${limiterStat.DONE || 0}`);
     });
 
     bot.hears('🖥 Select notification source', (ctx) => {
