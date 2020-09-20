@@ -20,11 +20,11 @@ function setupSelectSourceMenu(db, rules) {
                         isAdding = true;
                         const newNotifyFor = user.notifyFor.concat(key);
                         await db.get('users').find({ id: currentUser }).assign({ notifyFor: newNotifyFor }).write();
-                        await ctx.answerCbQuery(`You will now receive notification for ${rule.name} ✅`);
+                        await ctx.answerCbQuery(`Receiving notification from ${rule.name} ✅`);
                     } else {
                         const newNotifyFor = user.notifyFor.filter((k) => k !== key);
                         await db.get('users').find({ id: currentUser }).assign({ notifyFor: newNotifyFor }).write();
-                        await ctx.answerCbQuery(`You will not receive notification for ${rule.name} ❌`);
+                        await ctx.answerCbQuery(`Stopped notification from ${rule.name} ❌`);
                     }
 
                     // Update enabled rules list

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const low = require('lowdb');
 const config = require('config');
 const { Telegraf } = require('telegraf');
@@ -38,6 +39,24 @@ async function startBot() {
         notificationSourceMiddleware.replyToContext(ctx);
     });
 
+    bot.hears('🗒 Check current selection', async (ctx) => {
+        const currentUser = ctx.from.id;
+        const userRecord = await db.get('users')
+            .find({ id: currentUser })
+            .value();
+        if (userRecord) {
+            const { notifyFor } = userRecord;
+            if (notifyFor.length) {
+                const enabledNotify = notifyFor.map((id) => rules[id].name).join(', ');
+                ctx.reply(`You currently have ${enabledNotify} enabled.`);
+            } else {
+                ctx.reply('You do not have active notification selected');
+            }
+        } else {
+            ctx.reply('You are not a active user, please use /start to activate.');
+        }
+    });
+
     setupSelectSourceMenu(db, rules);
 
     let notificationSourceMiddleware = new MenuMiddleware('/', selectSourceMenu);
@@ -53,9 +72,19 @@ async function startBot() {
                 const rule = rules[enabledRule.id];
                 if (rule) {
                     try {
-                        const result = limiter.schedule(() => checkRule(rule));
+                        const result = await limiter.schedule(() => checkRule(rule));
                         if (result && result.change) {
-                            // Notify all the users
+                            const users = await db.get('users').value();
+                            for (let user of users) {
+                                const { notifyFor } = user;
+                                // If user has that notification set
+                                if (notifyFor.includes(enabledRule.id)) {
+                                    bot.telegram.sendMessage(user.id, `${rule.name} has changed to ${result.value}.`);
+                                    if (result.screenshot) {
+                                        bot.telegram.sendPhoto(user.id, { source: fs.createReadStream(result.screenshot) });
+                                    }
+                                }
+                            }
                         }
                     } catch (error) {
                         logger.error(`Failed checking rule ${rule.name}`, error);

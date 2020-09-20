@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const logger = require("../logger");
 
 async function checkWebsiteRule(rule) {
+    let checkResult = null;
     const { name, id, url, waitFor, checkFor } = rule;
     logger.info(`Checking rule ${name}`);
 
@@ -45,18 +46,12 @@ async function checkWebsiteRule(rule) {
                 await page.waitForSelector(selector);
                 const expectedValue = await (await page.$(selector)).evaluate((node) => node.innerText);
                 if (expectedValue !== value) {
-                    return {
+                    checkResult = {
                         name,
                         id,
                         change: true,
-                        value: expectedValue
-                    };
-                } else {
-                    return {
-                        name,
-                        id,
-                        change: false,
-                        value: expectedValue
+                        value: expectedValue,
+                        screenshot: `${id}.png`
                     };
                 }
             }
@@ -69,7 +64,7 @@ async function checkWebsiteRule(rule) {
     // Close the browser
     await browser.close();
 
-    return null;
+    return checkResult;
 }
 
 module.exports = checkWebsiteRule;
