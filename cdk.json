@@ -1,0 +1,5 @@
+{
+    "app": "npx ts-node cdk/index.ts",
+    "context": {
+    }
+}
