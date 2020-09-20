@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/r1cebank/website-watcher-bot#readme",
   "dependencies": {
+    "axios": "^0.20.0",
     "bottleneck": "^2.19.5",
     "config": "^3.3.1",
     "interval-promise": "^1.4.0",
+    "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "pino": "^6.6.1",
     "pino-pretty": "^4.2.1",

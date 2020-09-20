@@ -1,5 +1,6 @@
 name: NVIDIA Store RTX3080 (US)
-id: nvidia_3080_us
+id: nvidia_3080_website_us
+type: website
 url: https://www.nvidia.com/en-us/shop/geforce/?page=1&limit=9&locale=en-us
 waitFor:
   - type: selector

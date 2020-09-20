@@ -3,6 +3,6 @@
         "token": ""
     },
     "db": "db.json",
-    "refreshPeriod": "1",
+    "refreshPeriod": "3",
     "loglevel": "debug"
 }

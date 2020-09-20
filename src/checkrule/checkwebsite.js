@@ -1,8 +1,8 @@
 const puppeteer = require('puppeteer');
 
-const logger = require("./logger");
+const logger = require("../logger");
 
-async function checkRule(rule) {
+async function checkWebsiteRule(rule) {
     const { name, id, url, waitFor, checkFor } = rule;
     logger.info(`Checking rule ${name}`);
 
@@ -72,4 +72,4 @@ async function checkRule(rule) {
     return null;
 }
 
-module.exports = checkRule;
+module.exports = checkWebsiteRule;

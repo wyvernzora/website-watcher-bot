@@ -1,0 +1,12 @@
+name: NVIDIA Store RTX3080 API (US)
+id: nvidia_3080_api_ca
+type: api
+url: https://api.nvidia.partners/edge/product/search?page=1&limit=9&locale=en-us&gpu=RTX+3080
+validatePath:
+  - path: searchedProducts.featuredProduct.productSKU
+    type: equal
+    value: NVGFT080
+checkPath:
+  - path: searchedProducts.featuredProduct.totalCount
+    type: notEqual
+    value: null
