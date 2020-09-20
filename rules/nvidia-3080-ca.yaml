@@ -1,0 +1,16 @@
+name: NVIDIA Store RTX3080 (CA)
+id: nvidia_3080_ca
+url: https://www.nvidia.com/en-ca/shop/geforce/?page=1&limit=9&locale=en-ca
+waitFor:
+  - type: selector
+    selector: .product-container > div:nth-child(2) > h2:nth-child(1)
+    condition: value
+    value: NVIDIA GEFORCE RTX 3080
+  - type: selector
+    selector: a.featured-buy-link:nth-child(3)
+    condition: exists
+checkFor:
+  - type: selector
+    selector: a.featured-buy-link:nth-child(3)
+    condition: notEqual
+    value: OUT OF STOCK
