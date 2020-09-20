@@ -19,9 +19,15 @@
     "url": "https://github.com/wyvernzora/website-watcher-bot/issues"
   },
   "homepage": "https://github.com/wyvernzora/website-watcher-bot#readme",
-  "dependencies": {},
+  "dependencies": {
+    "pino": "^6.6.1",
+    "pino-pretty": "^4.2.1",
+    "telegraf-inline-menu": "^5.1.0",
+    "telegraf-ts": "^3.88.6"
+  },
   "devDependencies": {
     "@aws-cdk/aws-apigateway": "^1.63.0",
+    "@aws-cdk/aws-dynamodb": "^1.63.0",
     "@aws-cdk/aws-events": "^1.63.0",
     "@aws-cdk/aws-events-targets": "^1.63.0",
     "@aws-cdk/aws-lambda": "^1.63.0",
