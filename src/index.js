@@ -39,7 +39,7 @@ async function startBot() {
         const limiterStat = limiter.counts();
         const enabledRules = db.get('enabledRules').value();
         if (enabledRules.length) {
-            ctx.reply(`Refreshing for ${enabledRules.join(', ')}`);
+            ctx.reply(`Refreshing for ${enabledRules.map((r) => r.id).join(', ')}`);
         } else {
             ctx.reply('Not refreshing for any rule.');
         }
