@@ -28,7 +28,7 @@ function setupSelectSourceMenu(db, rules) {
                     }
 
                     // Update enabled rules list
-                    const enabledKey = db.get('enabledRules').find({ id: key }).value();
+                    const enabledKey = await db.get('enabledRules').find({ id: key }).value();
                     if (!enabledKey && isAdding) {
                         // Add the key with 1 if not exist
                         await db.get('enabledRules').push({

@@ -38,7 +38,7 @@ async function startBot() {
 
     bot.command('status', async ctx => {
         const limiterStat = limiter.counts();
-        const enabledRules = db.get('enabledRules').value();
+        const enabledRules = await db.get('enabledRules').value();
         if (enabledRules.length) {
             ctx.reply(`Refreshing for ${enabledRules.map((r) => r.id).join(', ')}`);
         } else {
@@ -79,7 +79,7 @@ async function startBot() {
 
     interval(async () => {
         // Schedule all the refresh
-        const enabledRules = db.get('enabledRules').value();
+        const enabledRules = await db.get('enabledRules').value();
         for (let enabledRule of enabledRules) {
             if (enabledRule.count > 0) {
                 const rule = rules[enabledRule.id];
