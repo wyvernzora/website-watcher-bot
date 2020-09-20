@@ -1,7 +1,7 @@
-name: NVIDIA Store RTX3090 (US)
-id: nvidia_3090_website_us
+name: NVIDIA Store RTX3090 (CA)
+id: nvidia_3090_website_ca
 type: website
-url: https://www.nvidia.com/en-us/shop/geforce/?page=1&limit=9&locale=en-us
+url: https://www.nvidia.com/en-ca/shop/geforce/?page=1&limit=9&locale=en-ca
 waitFor:
   - type: selector
     selector: div.product-details-list-tile:nth-child(1) > div:nth-child(2) > h2:nth-child(2)

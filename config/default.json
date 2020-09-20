@@ -2,7 +2,7 @@
     "telegram": {
         "token": ""
     },
-    "db": "/data/db.json",
+    "db": "db.json",
     "refreshPeriod": "3",
     "loglevel": "debug"
 }
