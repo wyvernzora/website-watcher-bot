@@ -22,6 +22,7 @@ const bot = new Telegraf(config.get('telegram.token'));
 // Rate limiter for refreshing websites
 const limiter = new Bottleneck({
     maxConcurrent: 1,
+    trackDoneStatus: true,
     minTime: 3000
 });
 

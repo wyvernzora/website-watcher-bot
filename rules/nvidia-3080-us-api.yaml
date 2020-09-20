@@ -1,5 +1,5 @@
 name: NVIDIA Store RTX3080 API (US)
-id: nvidia_3080_api_ca
+id: nvidia_3080_api_us
 type: api
 url: https://api.nvidia.partners/edge/product/search?page=1&limit=9&locale=en-us&gpu=RTX+3080
 validatePath:

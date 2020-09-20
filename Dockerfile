@@ -35,4 +35,7 @@ RUN npm install --only=production
 COPY src ./
 COPY rules ./rules
 COPY config ./config
+
+VOLUME [ "/data" ]
+
 CMD ["node", "index.js"]
