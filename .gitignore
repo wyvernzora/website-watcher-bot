@@ -106,3 +106,5 @@ dist
 .envrc
 
 *.png
+
+db.json
