@@ -42,10 +42,21 @@ async function checkWebsiteRule(rule) {
         const { type, selector, condition, value } = checkCondition;
         logger.info(`Checking for check condition: ${type}`);
         if (type === 'selector') {
+            await page.waitForSelector(selector);
+            const expectedValue = await (await page.$(selector)).evaluate((node) => node.innerText);
             if (condition === 'notEqual') {
-                await page.waitForSelector(selector);
-                const expectedValue = await (await page.$(selector)).evaluate((node) => node.innerText);
                 if (expectedValue !== value) {
+                    checkResult = {
+                        name,
+                        id,
+                        change: true,
+                        value: expectedValue,
+                        screenshot: `${id}.png`
+                    };
+                }
+            }
+            if (condition === 'equal') {
+                if (expectedValue === value) {
                     checkResult = {
                         name,
                         id,

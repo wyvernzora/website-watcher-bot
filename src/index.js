@@ -35,6 +35,12 @@ async function startBot() {
 
     bot.command('start', start(db));
 
+    bot.command('status', async ctx => {
+        const enabledRules = db.get('enabledRules').value();
+        ctx.reply(`Refreshing for ${enabledRules}`);
+        ctx.reply(`Uptime: ${process.uptime()}`);
+    });
+
     bot.hears('🖥 Select notification source', (ctx) => {
         notificationSourceMiddleware.replyToContext(ctx);
     });
