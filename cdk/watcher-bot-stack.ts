@@ -37,6 +37,7 @@ export class WatcherBotStack extends Stack {
                 USERS_TABLE: this.usersTable.tableName,
             },
         });
+        this.usersTable.grantReadWriteData(this.handlerLambda);
 
         this.handlerApi = new LambdaRestApi(this, 'HandlerApi', {
             handler: this.handlerLambda
@@ -53,6 +54,7 @@ export class WatcherBotStack extends Stack {
                 USERS_TABLE: this.usersTable.tableName,
             }
         });
+        this.usersTable.grantReadData(this.watcherLambda);
     
         this.watcherSchedule = new Rule(this, 'WatchLambdaSchedule', {
             enabled: false,
@@ -64,7 +66,7 @@ export class WatcherBotStack extends Stack {
     private createUsersTable() {
         this.usersTable = new Table(this, 'UsersTable', {
             partitionKey: {
-                type: AttributeType.STRING,
+                type: AttributeType.NUMBER,
                 name: 'userId',
             },
             billingMode: BillingMode.PAY_PER_REQUEST,
