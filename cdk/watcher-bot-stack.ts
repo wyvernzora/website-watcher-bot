@@ -3,7 +3,7 @@ import { LambdaRestApi, RestApi } from '@aws-cdk/aws-apigateway';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
 import { Rule, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction } from '@aws-cdk/aws-events-targets';
-import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
+import { Code, Function, Runtime, Tracing } from '@aws-cdk/aws-lambda';
 
 export interface Props {
     telegramToken: string
@@ -15,13 +15,13 @@ export class WatcherBotStack extends Stack {
     handlerApi: RestApi;
     watcherLambda: Function;
     watcherSchedule: Rule;
-    usersTable: Table
+    chatsTable: Table
 
 
     constructor(app: App, id: string, props: Props) {
         super(app, id);
 
-        this.createUsersTable();
+        this.createChatsTable();
         this.createRequestHandler(props);
         this.createWatcherLambda();
     }
@@ -30,14 +30,15 @@ export class WatcherBotStack extends Stack {
         this.handlerLambda = new Function(this, 'HandlerLambda', {
             code: Code.fromAsset('./dist'),
             handler: 'dist/handler.handleRequest',
-            timeout: Duration.seconds(3),
+            timeout: Duration.seconds(30),
             runtime: Runtime.NODEJS_12_X,
             environment: {
                 TELEGRAM_TOKEN: telegramToken,
-                USERS_TABLE: this.usersTable.tableName,
+                CHATS_TABLE: this.chatsTable.tableName,
             },
+            tracing: Tracing.ACTIVE,
         });
-        this.usersTable.grantReadWriteData(this.handlerLambda);
+        this.chatsTable.grantReadWriteData(this.handlerLambda);
 
         this.handlerApi = new LambdaRestApi(this, 'HandlerApi', {
             handler: this.handlerLambda
@@ -51,10 +52,11 @@ export class WatcherBotStack extends Stack {
             timeout: Duration.seconds(30),
             runtime: Runtime.NODEJS_12_X,
             environment: {
-                USERS_TABLE: this.usersTable.tableName,
-            }
+                CHATS_TABLE: this.chatsTable.tableName,
+            },
+            tracing: Tracing.ACTIVE,
         });
-        this.usersTable.grantReadData(this.watcherLambda);
+        this.chatsTable.grantReadData(this.watcherLambda);
     
         this.watcherSchedule = new Rule(this, 'WatchLambdaSchedule', {
             enabled: false,
@@ -63,11 +65,11 @@ export class WatcherBotStack extends Stack {
         });
     }
 
-    private createUsersTable() {
-        this.usersTable = new Table(this, 'UsersTable', {
+    private createChatsTable() {
+        this.chatsTable = new Table(this, 'ChatsTable', {
             partitionKey: {
                 type: AttributeType.NUMBER,
-                name: 'userId',
+                name: 'chatId',
             },
             billingMode: BillingMode.PAY_PER_REQUEST,
         });

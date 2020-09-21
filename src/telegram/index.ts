@@ -6,4 +6,3 @@ const client = new TelegramClient({
 export { client as TelegramClient };
 
 export * from './chat';
-export * from './user';
